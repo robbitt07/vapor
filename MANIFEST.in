@@ -1,0 +1,2 @@
+include README.md
+include vapor/model/train/config.cfg

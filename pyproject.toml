@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=42"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vapor"
+version = "1.0.0"
+authors = [
+  { name="Robert Goss", email="rgoss@yat.ai" },
+]
+description = "A simple and effective Python model for detecting Vaporware"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/robbitt07/vapor"
+"Bug Tracker" = "https://github.com/robbitt07/vapor/issues"
