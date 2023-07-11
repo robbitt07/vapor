@@ -2,8 +2,8 @@
 
 class StorageConfig(object):
     def __init__(self,
-                 aws_access_key_id: str,
-                 aws_secret_access_key: str,
+                 aws_access_key_id: str = None,
+                 aws_secret_access_key: str = None,
                  region_name: str = 'nyc3',
                  endpoint_url: str = 'https://nyc3.digitaloceanspaces.com') -> None:
         self.aws_access_key_id = aws_access_key_id

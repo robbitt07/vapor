@@ -33,8 +33,9 @@ train_pipeline(model_name="vapor", version="001", config=storage_config)
 
 Load and predict action.
 ```python
-from vapor.model import load_model
+from vapor.model import load_model, download_model
 
+download_model(model_name="vapor", version="001")
 model = load_model(model_name="vapor", version="001")
 
 transcript = """Vapor, an elegantly simple AI, NLP and blockchain solutions that can help leadership

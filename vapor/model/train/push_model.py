@@ -2,8 +2,19 @@ from ...config import StorageConfig
 
 import boto3
 from glob import glob
+import logging
 import os
 from pathlib import Path
+import sys
+
+logger = logging.getLogger("vapor.model")
+logger.setLevel(logging.DEBUG)
+
+handler = logging.StreamHandler(sys.stdout)
+handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 
 BUCKET = "vapor-app"
@@ -27,7 +38,10 @@ def push_model(model_name: str, version: str, config: StorageConfig) -> bool:
     for fl in fls:
         remote_fl = fl.replace(
             os.path.join(Path.home(), ".vapor"), ""
-        ).replace("\\", "/")
+        ).replace("\\", "/").lstrip("/")
+
+        logger.info(f"Uploading file={remote_fl}")
+
         s3.Bucket(BUCKET).upload_file(
             fl, remote_fl, ExtraArgs={'ACL': 'public-read'}
         )
