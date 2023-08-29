@@ -7,13 +7,13 @@ from .train_model import train_model
 
 def train_pipeline(model_name: str, version: str, config: StorageConfig = None):
     # Fetch Raw Data
-    fetch_raw_data(model_name=model_name, version=version)
+    fetch_raw_data(model_name=model_name, version=version, config=config)
     
     # Build spaCy Datasets
-    build_spacy_datasets(model_name=model_name, version=version)
+    build_spacy_datasets(model_name=model_name, version=version, config=config)
 
     # Train Model
-    train_model(model_name=model_name, version=version)
+    train_model(model_name=model_name, version=version, config=config)
 
     # Push Model
     push_model(model_name=model_name, version=version, config=config)

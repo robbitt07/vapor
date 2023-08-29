@@ -15,14 +15,13 @@ import shutil
 BUCKET = "vapor-data"
 
 
-def fetch_raw_data(model_name: str, version: str) -> bool:
+def fetch_raw_data(model_name: str, version: str, config: StorageConfig) -> bool:
 
-    s3 = boto3.resource(
-        's3',
-        region_name='nyc3',
-        endpoint_url='https://nyc3.digitaloceanspaces.com',
-        config=Config(signature_version=UNSIGNED)
-    )
+    # Check config valid
+    if not config.cred_valid:
+        return 
+
+    s3 = boto3.resource('s3', **config)
 
     # Remove directory
     data_dir = os.path.join(Path.home(), ".vapor", "data")

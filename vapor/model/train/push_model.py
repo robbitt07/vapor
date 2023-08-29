@@ -23,7 +23,7 @@ BUCKET = "vapor-app"
 def push_model(model_name: str, version: str, config: StorageConfig) -> bool:
 
     # Check config valid
-    if not config.valid:
+    if not config.cred_valid:
         return 
 
     s3 = boto3.resource('s3', **config)

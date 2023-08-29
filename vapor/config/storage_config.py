@@ -2,17 +2,20 @@
 
 class StorageConfig(object):
     def __init__(self,
+                 region_name: str,
+                 bucket_name: str,
+                 endpoint_url: str,
                  aws_access_key_id: str = None,
-                 aws_secret_access_key: str = None,
-                 region_name: str = 'nyc3',
-                 endpoint_url: str = 'https://nyc3.digitaloceanspaces.com') -> None:
-        self.aws_access_key_id = aws_access_key_id
-        self.aws_secret_access_key = aws_secret_access_key
-        self.region_name = region_name
-        self.endpoint_url = endpoint_url
+                 aws_secret_access_key: str = None) -> None:
+
+        self.region_name: str = region_name
+        self.bucket_name: str = bucket_name
+        self.endpoint_url: str = endpoint_url
+        self.aws_access_key_id: str = aws_access_key_id
+        self.aws_secret_access_key: str = aws_secret_access_key
 
     @property
-    def valid(self):
+    def cred_valid(self):
         assert self.aws_access_key_id not in (None, ""), "`aws_access_key_id` missing"
         assert self.aws_secret_access_key not in (None, ""), "`aws_secret_access_key` missing"
         return True

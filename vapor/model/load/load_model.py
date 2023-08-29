@@ -23,6 +23,7 @@ logger.addHandler(handler)
 
 
 class VaporModel(object):
+
     def __init__(self, nlp: English):
         self.nlp: English = nlp
 
@@ -31,15 +32,31 @@ class VaporModel(object):
         return doc.cats
 
 
-def download_model(model_name: str, version: str, config: StorageConfig = StorageConfig()) -> bool:
+def download_model(model_name: str,
+                   version: str,
+                   config: StorageConfig = StorageConfig()) -> bool:
+    """Download model files 
 
+    Parameters
+    ----------
+    model_name : str
+        _description_
+    version : str
+        _description_
+    config : StorageConfig, optional
+        _description_, by default StorageConfig()
+
+    Returns
+    -------
+    bool
+        _description_
+    """
     s3 = boto3.resource(
-        "s3", config=Config(signature_version=UNSIGNED), **config
+        "s3", **config, config=Config(signature_version=UNSIGNED)
     )
-    BUCKET = "vapor-app"
 
     logger.info(f"Downloading model={model_name}.{version}...")
-    for obj in s3.Bucket(BUCKET).objects.filter(Prefix=f"models/{model_name}.{version}/"):
+    for obj in s3.Bucket(config.bucket_name).objects.filter(Prefix=f"models/{model_name}.{version}/"):
         filename = obj.key.replace("models/", "")
 
         filename = os.path.join(Path.home(), ".vapor", "models", filename)
@@ -50,12 +67,21 @@ def download_model(model_name: str, version: str, config: StorageConfig = Storag
             f.write(obj.get()["Body"].read())
 
 
-def load_model(model_name: str, version: str) -> VaporModel:
-    filename = os.path.join(
+def load_model(model_name: str,
+               version: str,
+               config: StorageConfig = None) -> VaporModel:
+    
+    dir_name = os.path.join(
         Path.home(
         ), ".vapor", "models", f"{model_name}.{version}", "model-best"
     )
-    # TODO: If doesn"t exist then pull down
-    
-    nlp = spacy.load(name=filename)
+
+    # If doesn"t exist then pull down
+    if not os.path.exists(dir_name):
+        if config is None:
+            raise ValueError("Unable to download Model, must provide config")
+
+        download_model(model_name=model_name, version=version, config=config)
+
+    nlp = spacy.load(name=dir_name)
     return VaporModel(nlp)
